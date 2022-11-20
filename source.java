@@ -129,6 +129,33 @@ public class source {
         return false;
     }
 
+    private static void add() throws IOException {
+        String _keyInput, _meaningInput;
+        System.out.print("Enter slang word: ");
+        _keyInput = sc.nextLine();
+        System.out.print("Enter difinition: ");
+        _meaningInput = sc.nextLine();
+
+        int choice;
+        for (String key : dict.keySet()) {
+            if (key == _meaningInput) {
+                System.out.print("Slang word already exists!\t1. Overwrite\t2. Duplicate\n");
+                choice = sc.nextInt();
+                while (choice != 1 && choice != 2) {
+                    System.out.println("Invalid value");
+                }
+                if (choice == 1) {
+                    List<String> meaning = new ArrayList<String>();
+                    meaning.add(_meaningInput);
+                    dict.put(_keyInput, meaning);
+                } else {
+                    dict.get(key).add(_meaningInput);
+                }
+            }
+        }
+        saveFile("slangAfter.txt");
+    }
+
     private static void edit() {
 
     }
