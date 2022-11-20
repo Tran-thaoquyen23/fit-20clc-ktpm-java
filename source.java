@@ -4,21 +4,27 @@ import java.io.*;
 
 public class source {
 
-    static TreeMap<String, SortedSet<String>> dict = new TreeMap<String, SortedSet<String>>();
+    static TreeMap<String, List<String>> dict = new TreeMap<String, List<String>>();
+
+    static HashMap<String, List<String>> searchHistory = new HashMap<String, List<String>>();
+
+    static Scanner sc = new Scanner(System.in);
 
     source() {
         if (dict.size() != 0) {
             dict.clear();
         }
-        SortedSet<String> mn = new TreeSet<String>();
+        searchHistory.clear();
+        List<String> mn = new ArrayList<String>();
         mn.add("Meaning");
         dict.put("Slag", mn);
     }
 
-    source(String _slag, SortedSet<String> _meaning) {
+    source(String _slag, List<String> _meaning) {
         if (dict.size() != 0) {
             dict.clear();
         }
+        searchHistory.clear();
         dict.put(_slag, _meaning);
     }
 
@@ -37,11 +43,11 @@ public class source {
         while ((line = br.readLine()) != null) {
             String[] str = line.split(slitBy);
             String slang = str[0];
-            // System.out.println(slag);
+            // System.out.println(slang);
             String meaning = str[1];
             // System.out.println(meaning);
 
-            SortedSet<String> meanList = new TreeSet<String>();
+            List<String> meanList = new ArrayList<String>();
 
             if (meaning.contains("| ") == true) {
                 meaning = meaning.replace("| ", "@");
@@ -71,27 +77,94 @@ public class source {
             System.out.println("Error opening " + filename);
             return;
         }
-        for (Map.Entry m : dict.entrySet()) {
-            // String key = ;
-            // bw.write(m.getKey());
-            // bw.write("` ");
-
+        for (String key : dict.keySet()) {
+            bw.write(key);
+            bw.write("`");
+            List<String> meaning = dict.get(key);
+            bw.write(meaning.get(0));
+            if (meaning.size() > 1) {
+                for (int i = 1; i < meaning.size(); i++) {
+                    bw.write("| ");
+                    bw.write(meaning.get(i));
+                }
+            }
+            bw.newLine();
         }
 
         bw.flush();
         bw.close();
     }
 
-    private static void search() {
+    private static void search_BySlangWord(String keyword) {
+        for (String key : dict.keySet()) {
+            // System.out.println("--------------");
+            if (key.contains(keyword)) {
+                System.out.println(key + dict.get(key));
+                searchHistory.put(key, dict.get(key)); // add vao lich su tim kiem
+            }
+        }
+    }
+
+    private static void search_ByDefinition(String keyword) {
+        for (String key : dict.keySet()) {
+            boolean flag = false;
+            for (String str : dict.get(key)) {
+                if (str.contains(keyword)) {
+                    flag = true;
+                }
+            }
+            if (flag) {
+                System.out.println(key + dict.get(key));
+                searchHistory.put(key, dict.get(key)); // add vao lich su tim kiem
+            }
+        }
+    }
+
+    static private boolean checkExist(String slangWord) {
+        for (String key : dict.keySet()) {
+            if (key == slangWord) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static void edit() {
 
     }
 
-    private static void insert() {
+    private static void delete() {
+
+    }
+
+    private static void reset() throws IOException {
+        readFile("slang.txt");
+    }
+
+    private static void random() {
+
+    }
+
+    private static void funQuestionSlangWord() {
+
+    }
+
+    private static void funQuestionDefinition() {
 
     }
 
     public static void main(String[] args) throws IOException {
         readFile("slang.txt");
+
+        saveFile("output.txt");
+
+        search_BySlangWord("HOO");
+
+        System.out.print("\n\n");
+
+        search_ByDefinition("Leave");
+
+        // add();
 
     }
 
