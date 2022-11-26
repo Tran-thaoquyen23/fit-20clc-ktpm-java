@@ -1,13 +1,14 @@
 import java.io.IOException;
 import java.util.*;
+import java.util.zip.CheckedOutputStream;
 import java.io.*;
+import java.lang.Math.*;
 
 public class Dictionary {
+    public static Scanner scanner = new Scanner(System.in);
 
     static TreeMap<String, Set<String>> dict = new TreeMap<String, Set<String>>();
-
     static TreeMap<String, Set<String>> searchHistory = new TreeMap<String, Set<String>>();
-
     static TreeMap<String, Set<String>> subTreeMap = new TreeMap<String, Set<String>>();
 
     static Scanner sc = new Scanner(System.in);
@@ -205,16 +206,145 @@ public class Dictionary {
         readFile("slang.txt");
     }
 
-    private static void random() {
+    private static TreeMap<String, Set<String>> random() {
+        subTreeMap = new TreeMap<String, Set<String>>();
+        Random r = new Random();
+
+        int randomIndex = r.nextInt(dict.size());
+        Set<String> keys = dict.keySet();
+        List<String> keyList = new ArrayList<String>();
+        keyList.addAll(keys);
+        String randomKey = keyList.get(randomIndex);
+        Set<String> randomMeaning = dict.get(randomKey);
+
+        subTreeMap.put(randomKey, randomMeaning);
+
+        // System.out.println("random: " + randomKey);
+        // for (String e : randomMeaning) {
+        // System.out.print(e + "| ");
+        // }
+
+        return subTreeMap;
 
     }
 
+    private static String randomKey() {
+        Random r = new Random();
+
+        int randomIndex = r.nextInt(dict.size());
+        Set<String> keys = dict.keySet();
+        List<String> keyList = new ArrayList<String>();
+        keyList.addAll(keys);
+        String randomKey = keyList.get(randomIndex);
+        return randomKey;
+    }
+
+    private static String randomMeaning() {
+        String randomKey = randomKey();
+        Set<String> meanings = dict.get(randomKey);
+        List<String> meaningList = new ArrayList<>();
+        meaningList.addAll(meanings);
+
+        Random r = new Random();
+        int randomIndex = r.nextInt(meaningList.size());
+
+        String randMeaning = meaningList.get(randomIndex);
+        return randMeaning;
+    }
+
+    private static boolean checkOptionOfFunQuestion(List<String> option) {
+        String a = option.get(0);
+        String b = option.get(1);
+        String c = option.get(2);
+        String d = option.get(3);
+        if (!a.equals(b) && (!a.equals(c)) && (!a.equals(d)) && (!b.equals(c)) && (!b.equals(d)) && (!c.equals(d))) {
+            return true;
+        }
+        return false;
+    }
+
+    private static String randomItemOfSet(Set<String> set) {
+        List<String> list = new ArrayList<>();
+        list.addAll(set);
+        Random r = new Random();
+        int randomNumber = r.nextInt(list.size());
+        String result = list.get(randomNumber);
+        return result;
+    }
+
     private static void funQuestionSlangWord() {
+        subTreeMap = new TreeMap<String, Set<String>>();
+        subTreeMap = random();
+        String randomQues = subTreeMap.firstKey();
+        Set<String> randomResult = subTreeMap.get(randomQues);
+        String result = randomItemOfSet(randomResult);
+
+        List<String> options = new ArrayList<>();
+        Random r = new Random();
+        int randomNumber;
+
+        do {
+            randomNumber = r.nextInt(4);
+            System.out.println("-------" + randomNumber + "------");
+            for (int i = 0; i < 4; i++) {
+                if (i == randomNumber) {
+                    options.add(result);
+                } else {
+                    options.add(randomMeaning());
+                }
+            }
+        } while (!checkOptionOfFunQuestion(options));
+
+        System.out.println("\nFunQues_slangWord: " + randomQues + "\n");
+        for (String e : options) {
+            System.out.print(e + "\t");
+        }
+
+        int choice;
+        choice = scanner.nextInt();
+
+        if (choice == randomNumber) {
+            System.out.println("Bingo");
+        } else {
+            System.out.print("Wrong");
+        }
 
     }
 
     private static void funQuestionDefinition() {
+        subTreeMap = new TreeMap<String, Set<String>>();
+        subTreeMap = random();
+        String result = subTreeMap.firstKey();
+        Set<String> randomQues = subTreeMap.get(result);
 
+        List<String> options = new ArrayList<>();
+
+        Random r = new Random();
+        int randomNumber;
+
+        do {
+            randomNumber = r.nextInt(4);
+            for (int i = 0; i < 4; i++) {
+                if (i == randomNumber) {
+                    options.add(result);
+                } else {
+                    options.add(randomKey());
+                }
+            }
+        } while (!checkOptionOfFunQuestion(options));
+
+        System.out.println("Fun question _ definition: " + randomQues);
+        for (String e : options) {
+            System.out.print(e + "\t");
+        }
+
+        int choice = sc.nextInt();
+
+        if (choice == randomNumber) {
+            System.out.println("Bingo");
+        } else {
+            System.out.println("Wrong");
+        }
     }
 
     public static void main(String[] args) throws IOException {
@@ -230,19 +360,23 @@ public class Dictionary {
 
         // add();
 
-        add();
-        if (checkExist("THAOQUYEN")) {
-            System.out.println("Co ton tai. Add thanh cong!");
-        } else {
-            System.out.println("Khong ton tai. Add khong thanh cong");
-        }
+        // add();
+        // if (checkExist("THAOQUYEN")) {
+        // System.out.println("Co ton tai. Add thanh cong!");
+        // } else {
+        // System.out.println("Khong ton tai. Add khong thanh cong");
+        // }
 
-        delete("POST");
-        if (checkExist("POST")) {
-            System.out.println("Co ton tai. delete ko thanh cong!");
-        } else {
-            System.out.println("Khong ton tai. delete thanh cong");
-        }
+        // delete("THAOQUYEN");
+        // if (checkExist("THAOQUYEN")) {
+        // System.out.println("Co ton tai. delete ko thanh cong!");
+        // } else {
+        // System.out.println("Khong ton tai. delete thanh cong");
+        // }
+
+        // random();
+        funQuestionSlangWord();
+        funQuestionDefinition();
 
     }
 }
