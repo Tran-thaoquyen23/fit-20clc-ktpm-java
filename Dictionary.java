@@ -7,31 +7,26 @@ import java.lang.Math.*;
 public class Dictionary {
     public static Scanner scanner = new Scanner(System.in);
 
-    static TreeMap<String, Set<String>> dict = new TreeMap<String, Set<String>>();
-    static TreeMap<String, Set<String>> searchHistory = new TreeMap<String, Set<String>>();
-    static TreeMap<String, Set<String>> subTreeMap = new TreeMap<String, Set<String>>();
+    static TreeMap<String, Set<String>> dict;
+    // static TreeMap<String, Set<String>> searchHistory;
+    static TreeMap<String, Set<String>> subTreeMap;
 
     static Scanner sc = new Scanner(System.in);
 
-    Dictionary() {
-        if (dict.size() != 0) {
-            dict.clear();
-        }
-        searchHistory.clear();
-        Set<String> mn = new HashSet<String>();
-        mn.add("Meaning");
-        dict.put("Slag", mn);
+    Dictionary() throws IOException {
+        dict = new TreeMap<String, Set<String>>();
+        readFile("slang.txt");
+
     }
 
     Dictionary(String _slag, Set<String> _meaning) {
         if (dict.size() != 0) {
             dict.clear();
         }
-        searchHistory.clear();
         dict.put(_slag, _meaning);
     }
 
-    private static void readFile(String filename) throws IOException {
+    public static void readFile(String filename) throws IOException {
         BufferedReader br;
         try {
             br = new BufferedReader(new FileReader(filename));
@@ -71,7 +66,7 @@ public class Dictionary {
 
     }
 
-    private static void saveFile(String filename) throws IOException {
+    private void saveFile(String filename) throws IOException {
         BufferedWriter bw;
         try {
             bw = new BufferedWriter(new FileWriter(filename));
@@ -100,20 +95,20 @@ public class Dictionary {
         bw.close();
     }
 
-    private static TreeMap<String, Set<String>> search_BySlangWord(String keyword) {
+    public TreeMap<String, Set<String>> search_BySlangWord(String keyword) {
         subTreeMap = new TreeMap<String, Set<String>>();
         for (String key : dict.keySet()) {
             // System.out.println("--------------");
-            if (key.contains(keyword)) {
+            if (key.indexOf(keyword) == 0) {
                 System.out.println(key + dict.get(key));
-                searchHistory.put(key, dict.get(key)); // add vao lich su tim kiem
+                // searchHistory.put(key, dict.get(key)); // add vao lich su tim kiem
                 subTreeMap.put(key, dict.get(key));
             }
         }
         return subTreeMap;
     }
 
-    private static TreeMap<String, Set<String>> search_ByDefinition(String keyword) {
+    public TreeMap<String, Set<String>> search_ByDefinition(String keyword) {
         subTreeMap = new TreeMap<String, Set<String>>();
         for (String key : dict.keySet()) {
             boolean flag = false;
@@ -124,14 +119,14 @@ public class Dictionary {
             }
             if (flag) {
                 System.out.println(key + dict.get(key));
-                searchHistory.put(key, dict.get(key)); // add vao lich su tim kiem
+                // searchHistory.put(key, dict.get(key)); // add vao lich su tim kiem
                 subTreeMap.put(key, dict.get(key));
             }
         }
         return subTreeMap;
     }
 
-    static public boolean checkExist(String slangWord) {
+    public boolean checkExist(String slangWord) {
         System.out.println("\n\n\n");
         for (String key : dict.keySet()) {
             System.out.println(key + "\n");
@@ -142,7 +137,7 @@ public class Dictionary {
         return false;
     }
 
-    private static void add() throws IOException {
+    public void add() throws IOException {
         String _keyInput, _meaningInput;
         System.out.print("Enter slang word: ");
         _keyInput = sc.nextLine();
@@ -176,7 +171,7 @@ public class Dictionary {
         saveFile("slangAfter.txt");
     }
 
-    private static void edit(String slangWord) {
+    public static void edit(String slangWord) {
         String _keyInput, _meaningInput;
         System.out.println("Enter new slang word: ");
         _keyInput = sc.nextLine();
@@ -190,7 +185,7 @@ public class Dictionary {
 
     }
 
-    private static void delete(String SlangWord) throws IOException {
+    public void delete(String SlangWord) throws IOException {
         if (checkExist(SlangWord)) {
             int choice = 0;
             System.out.println("Remove " + SlangWord + dict.get(SlangWord) + "?\t0. No\t1. Yes");
@@ -202,11 +197,11 @@ public class Dictionary {
         saveFile("SlangAfterRemove.txt");
     }
 
-    private static void reset() throws IOException {
+    public static void reset() throws IOException {
         readFile("slang.txt");
     }
 
-    private static TreeMap<String, Set<String>> random() {
+    public static TreeMap<String, Set<String>> random() {
         subTreeMap = new TreeMap<String, Set<String>>();
         Random r = new Random();
 
@@ -263,7 +258,7 @@ public class Dictionary {
         return false;
     }
 
-    private static String randomItemOfSet(Set<String> set) {
+    public static String randomItemOfSet(Set<String> set) {
         List<String> list = new ArrayList<>();
         list.addAll(set);
         Random r = new Random();
@@ -272,7 +267,7 @@ public class Dictionary {
         return result;
     }
 
-    private static void funQuestionSlangWord() {
+    public static void funQuestionSlangWord() {
         subTreeMap = new TreeMap<String, Set<String>>();
         subTreeMap = random();
         String randomQues = subTreeMap.firstKey();
@@ -311,7 +306,7 @@ public class Dictionary {
 
     }
 
-    private static void funQuestionDefinition() {
+    public void funQuestionDefinition() {
         subTreeMap = new TreeMap<String, Set<String>>();
         subTreeMap = random();
         String result = subTreeMap.firstKey();
@@ -347,36 +342,39 @@ public class Dictionary {
         }
     }
 
-    public static void main(String[] args) throws IOException {
-        readFile("slang_test.txt");
+    // public static void main(String[] args) throws IOException {
+    // readFile("slang.txt");
 
-        saveFile("output_test.txt");
+    // saveFile("output_test.txt");
 
-        search_BySlangWord("HOO");
+    // search_BySlangWord("HOO");
 
-        System.out.print("\n\n");
+    // System.out.print("\n\n");
 
-        search_ByDefinition("Leave");
+    // search_ByDefinition("Leave");
 
-        // add();
+    // // add();
 
-        // add();
-        // if (checkExist("THAOQUYEN")) {
-        // System.out.println("Co ton tai. Add thanh cong!");
-        // } else {
-        // System.out.println("Khong ton tai. Add khong thanh cong");
-        // }
+    // // add();
+    // // if (checkExist("THAOQUYEN")) {
+    // // System.out.println("Co ton tai. Add thanh cong!");
+    // // } else {
+    // // System.out.println("Khong ton tai. Add khong thanh cong");
+    // // }
 
-        // delete("THAOQUYEN");
-        // if (checkExist("THAOQUYEN")) {
-        // System.out.println("Co ton tai. delete ko thanh cong!");
-        // } else {
-        // System.out.println("Khong ton tai. delete thanh cong");
-        // }
+    // // delete("THAOQUYEN");
+    // // if (checkExist("THAOQUYEN")) {
+    // // System.out.println("Co ton tai. delete ko thanh cong!");
+    // // } else {
+    // // System.out.println("Khong ton tai. delete thanh cong");
+    // // }
 
-        // random();
-        funQuestionSlangWord();
-        funQuestionDefinition();
+    // // random();
+    // funQuestionSlangWord();
+    // funQuestionDefinition();
+
+    // }
+    public static void main() {
 
     }
 }
