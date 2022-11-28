@@ -1,20 +1,21 @@
 import java.awt.*;
 import javax.swing.*;
+
 import java.awt.event.*;
 import java.util.*;
 
-//ADD
+//EDIT
 
-public class Card3 extends JPanel implements ActionListener {
+public class Card4 extends JPanel implements ActionListener {
     JTextField slangWordInput;
     JTextField meaningInput;
     Dictionary dictionary;
-    JRadioButton overwrite, duplicate;
+    JRadioButton yesBtn, noBtn;
     JLabel notiOptions;
     JLabel message;
     JPanel optionFrame;
 
-    public Card3(Dictionary dict) {
+    public Card4(Dictionary dict) {
         dictionary = dict;
 
         // Input slang word
@@ -37,8 +38,8 @@ public class Card3 extends JPanel implements ActionListener {
         meaningInput.setMaximumSize(new Dimension(300, 20));
         meaningInput.setAlignmentX(Component.LEFT_ALIGNMENT);
 
-        JButton addBtn = new JButton("Add");
-        addBtn.setActionCommand("add");
+        JButton addBtn = new JButton("Edit");
+        addBtn.setActionCommand("edit");
         addBtn.addActionListener(this);
         addBtn.setAlignmentX(Component.LEFT_ALIGNMENT);
 
@@ -60,23 +61,20 @@ public class Card3 extends JPanel implements ActionListener {
 
         notiOptions = new JLabel();
         notiOptions.setText("This word already exists in dictionary! Choose option: ");
-        overwrite = new JRadioButton("Overwrite");
-        duplicate = new JRadioButton("Duplicate");
+        yesBtn = new JRadioButton("yes");
+        noBtn = new JRadioButton("no");
 
         ButtonGroup btnGroup = new ButtonGroup();
-        btnGroup.add(overwrite);
-        btnGroup.add(duplicate);
+        btnGroup.add(yesBtn);
+        btnGroup.add(noBtn);
 
         JButton confirmBtn = new JButton("Confirm");
         confirmBtn.setActionCommand("confirm");
         confirmBtn.addActionListener(this);
 
-        optionFrame = new JPanel();
-        optionFrame.setLayout(new BoxLayout(optionFrame, BoxLayout.Y_AXIS));
-
         optionFrame.add(notiOptions);
-        optionFrame.add(overwrite);
-        optionFrame.add(duplicate);
+        optionFrame.add(yesBtn);
+        optionFrame.add(noBtn);
         optionFrame.add(Box.createRigidArea(new Dimension(0, 10)));
         optionFrame.add(confirmBtn);
         optionFrame.setVisible(false);
@@ -94,7 +92,6 @@ public class Card3 extends JPanel implements ActionListener {
         wrap.add(Box.createRigidArea(new Dimension(0, 20)));
         wrap.add(bottomPanel);
         wrap.add(Box.createVerticalGlue());
-        setVisible(true);
 
         setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
         add(Box.createRigidArea(new Dimension(80, 0)));
@@ -105,33 +102,25 @@ public class Card3 extends JPanel implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         String key = dictionary.checkExist(slangWordInput.getText());
 
-        if (e.getActionCommand().equals("add")) {
+        if (e.getActionCommand().equals("edit")) {
             if (key == null) {
-                Set<String> means = new HashSet<>();
-                means.add(meaningInput.getText());
-                key = slangWordInput.getText();
-                slangWordInput.setText("");
-                meaningInput.setText("");
-                dictionary.add(key, means);
-                JOptionPane.showMessageDialog(this, "Add successfully", "Successful message",
-                        JOptionPane.INFORMATION_MESSAGE);
+                message.setText("This word doesn't exist in dictionary");
                 optionFrame.setVisible(false);
             } else {
-                optionFrame.setVisible(true);
                 message.setText("");
+                optionFrame.setVisible(true);
             }
         } else if (e.getActionCommand().equals("confirm")) {
             Set<String> means = new HashSet<>();
             means.add(meaningInput.getText());
 
-            if (duplicate.isSelected()) {
-                dictionary.add_duplicate(key, meaningInput.getText());
+            if (yesBtn.isSelected()) {
+                if (dictionary.edit(key, means)) {
+                    slangWordInput.setText("");
+                    message.setText("Edit successfully!");
+                } else
+                    message.setText("Edit failure!");
             }
-            if (overwrite.isSelected()) {
-                dictionary.add_overwrite(key, means);
-            }
-            JOptionPane.showMessageDialog(this, "Add successfully", "Successful message",
-                    JOptionPane.INFORMATION_MESSAGE);
             optionFrame.setVisible(false);
         }
     }

@@ -1,18 +1,24 @@
 import java.awt.*;
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+
 import java.awt.event.*;
 import java.io.IOException;
-import java.util.*;
 
 public class UI implements ActionListener {
     private static JFrame frame;
     JPanel cards;
     JLabel label;
     JPanel menuPanel, contentPanel;
-    JButton searchBtn, addBtn, editBtn, deleteBtn, resetBtn, historyBtn, randomBtn, funQuestionBtn;
+    JButton searchBtn, addBtn, editBtn, deleteBtn, resetBtn, historyBtn, randomBtn, funQuestionBtn_slangWord,
+            funQuestionBtn_definition;
+
+    JButton buttons[];
+
     JPanel searchContent;
-    JPanel card1, card2, card3, card4, card5, card6, card7, card8;
+    JPanel cardDefault, card1, card2, card3, card4, card5, card6, card7, card8, card9;
     Dictionary dictionary;
+    DefaultTableModel dtbh;
 
     public UI() throws IOException {
         frame = new JFrame("20127305 - Dictionary App");
@@ -23,13 +29,9 @@ public class UI implements ActionListener {
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         dictionary = new Dictionary();
-        // dictionary.setVisible(false);
-
+        dtbh = new DefaultTableModel();
         menuPanel = new JPanel();
-        // MenuItemListener menuItemListener = new MenuItemListener();
-
-        // BoxLayout boxLayout = new BoxLayout(menu, BoxLayout.Y_AXIS);
-        menuPanel.setLayout(new GridLayout(9, 1, 0, 10));
+        menuPanel.setLayout(new GridLayout(10, 1, 0, 6));
         menuPanel.setPreferredSize(new Dimension(120, 410));
 
         JLabel menuLabel = new JLabel("Menu", JLabel.CENTER);
@@ -37,46 +39,40 @@ public class UI implements ActionListener {
         menuLabel.setSize(100, 80);
 
         searchBtn = new JButton("Search");
-        searchBtn.setActionCommand("search");
-        // searchBtn.setBounds(50, 100, 200, 30);
-        searchBtn.setBackground(Color.white);
+        searchBtn.setActionCommand("searchBtn");
         searchBtn.addActionListener(this);
 
         historyBtn = new JButton("History");
-        historyBtn.setActionCommand("history");
-        historyBtn.setPreferredSize(new Dimension(100, 20));
+        historyBtn.setActionCommand("historyBtn");
         historyBtn.addActionListener(this);
 
         addBtn = new JButton("Add");
-        addBtn.setActionCommand("add");
-        addBtn.setPreferredSize(new Dimension(100, 20));
+        addBtn.setActionCommand("addBtn");
         addBtn.addActionListener(this);
 
         editBtn = new JButton("Edit");
-        editBtn.setActionCommand("edit");
-        editBtn.setPreferredSize(new Dimension(100, 20));
+        editBtn.setActionCommand("editBtn");
         editBtn.addActionListener(this);
 
         deleteBtn = new JButton("Delete");
-        deleteBtn.setActionCommand("delete");
-        deleteBtn.setPreferredSize(new Dimension(100, 20));
+        deleteBtn.setActionCommand("deleteBtn");
         deleteBtn.addActionListener(this);
 
         resetBtn = new JButton("Reset");
-        resetBtn.setActionCommand("reset");
-        resetBtn.setPreferredSize(new Dimension(100, 20));
+        resetBtn.setActionCommand("resetBtn");
         resetBtn.addActionListener(this);
 
         randomBtn = new JButton("Random");
-        randomBtn.setActionCommand("random");
-        randomBtn.setPreferredSize(new Dimension(100, 20));
+        randomBtn.setActionCommand("randomBtn");
         randomBtn.addActionListener(this);
 
-        funQuestionBtn = new JButton("Fun question");
-        funQuestionBtn.setActionCommand("funQuestion");
-        funQuestionBtn.setBounds(50, 100, 95, 20);
-        funQuestionBtn.addActionListener(this);
-        // funQuestionButton.setPreferredSize(new Dimension(100, 30));
+        funQuestionBtn_slangWord = new JButton("Quiz 1");
+        funQuestionBtn_slangWord.setActionCommand("funQuestionBtn_slangWord");
+        funQuestionBtn_slangWord.addActionListener(this);
+
+        funQuestionBtn_definition = new JButton("Quiz 2");
+        funQuestionBtn_definition.setActionCommand("funQuestionBtn_definition");
+        funQuestionBtn_definition.addActionListener(this);
 
         menuPanel.add(menuLabel);
         menuPanel.add(searchBtn);
@@ -86,47 +82,69 @@ public class UI implements ActionListener {
         menuPanel.add(deleteBtn);
         menuPanel.add(resetBtn);
         menuPanel.add(randomBtn);
-        menuPanel.add(funQuestionBtn);
-        menuPanel.setBackground(Color.ORANGE);
+        menuPanel.add(funQuestionBtn_slangWord);
+        menuPanel.add(funQuestionBtn_definition);
 
         contentPanel = new JPanel(new CardLayout());
-        contentPanel.setPreferredSize(new Dimension(480, 530));
+        contentPanel.setPreferredSize(new Dimension(480, 430));
         contentPanel.setBackground(Color.RED);
-        card1 = new Card1(dictionary);
-        card2 = new Card2(dictionary);
+        cardDefault = new CardDefault();
+        card1 = new Card1(dictionary, dtbh);
+        card2 = new Card2(dictionary, dtbh);
         card3 = new Card3(dictionary);
-        contentPanel.add(card1, "search");
-        contentPanel.add(card2, "history");
-        contentPanel.add(card3, "add");
-        // cards.add(card3);
-        // cards.add(card4);
-        // cards.add(card5);
-        // cards.add(card6);
-        // cards.add(card7);
-        // cards.add(card8);
+        card4 = new Card4(dictionary);
+        card5 = new Card5(dictionary);
+        card6 = new Card6(dictionary);
+        card7 = new Card7(dictionary);
+        card8 = new Card8(dictionary);
+        card9 = new Card9(dictionary);
+
+        contentPanel.add(cardDefault);
+        contentPanel.add(card1, "searchBtn");
+        contentPanel.add(card2, "historyBtn");
+        contentPanel.add(card3, "addBtn");
+        contentPanel.add(card4, "editBtn");
+        contentPanel.add(card5, "deleteBtn");
+        contentPanel.add(card6, "resetBtn");
+        contentPanel.add(card7, "randomBtn");
+        contentPanel.add(card8, "funQuestionBtn_slangWord");
+        contentPanel.add(card9, "funQuestionBtn_definition");
 
         frame.add(menuPanel);
         frame.add(contentPanel);
 
         frame.setVisible(true);
 
-    }
-
-    public void itemStateChanged(ItemEvent evt) {
-        // card1 = new Card1(dictionary);
-        CardLayout cl = (CardLayout) (cards.getLayout());
-        cl.show(cards, (String) evt.getItem());
+        buttons = new JButton[9];
+        buttons[0] = searchBtn;
+        buttons[1] = addBtn;
+        buttons[2] = editBtn;
+        buttons[3] = deleteBtn;
+        buttons[4] = resetBtn;
+        buttons[5] = historyBtn;
+        buttons[6] = randomBtn;
+        buttons[7] = funQuestionBtn_slangWord;
+        buttons[8] = funQuestionBtn_definition;
     }
 
     // chuyen card
     public void actionPerformed(ActionEvent e) {
+        clearColorButton();
+
         CardLayout cardLayout = (CardLayout) contentPanel.getLayout();
         cardLayout.show(contentPanel, e.getActionCommand());
+
+        AbstractButton button = (AbstractButton) e.getSource();
+        button.setBackground(Color.WHITE);
+    }
+
+    public void clearColorButton() {
+        for (int i = 0; i < 9; i++) {
+            buttons[i].setBackground(null);
+        }
     }
 
     public static void main(String[] args) throws IOException {
         new UI();
-        // ui.showMenu(frame);
-
     }
 }
