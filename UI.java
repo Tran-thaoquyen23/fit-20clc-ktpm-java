@@ -94,7 +94,7 @@ public class UI implements ActionListener {
         card3 = new Card3(dictionary);
         card4 = new Card4(dictionary);
         card5 = new Card5(dictionary);
-        card6 = new Card6(dictionary);
+        card6 = new Card6(dictionary, dtbh);
         card7 = new Card7(dictionary);
         card8 = new Card8(dictionary);
         card9 = new Card9(dictionary);

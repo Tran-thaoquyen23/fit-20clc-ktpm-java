@@ -110,7 +110,6 @@ public class Dictionary {
                 }
             }
             if (flag) {
-                System.out.println(key + dict.get(key));
                 subTreeMap.put(key, dict.get(key));
             }
         }
@@ -281,7 +280,6 @@ public class Dictionary {
         } while (!checkOptionOfFunQuestion(quiz));
 
         quiz.add(result);
-        System.out.println("trong dict " + quiz);
         return quiz;
     }
 

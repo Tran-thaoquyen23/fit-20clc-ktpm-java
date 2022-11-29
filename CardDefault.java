@@ -1,5 +1,6 @@
 import java.awt.*;
 import javax.swing.*;
+import javax.swing.border.Border;
 
 // DEFAULT CONTENT PANEL
 public class CardDefault extends JPanel {
@@ -13,22 +14,29 @@ public class CardDefault extends JPanel {
         name = new JLabel("Name: Tran Thao Quyen");
         id = new JLabel("ID: 20127305");
 
-        title.setFont(new Font("Arial", Font.PLAIN, 25));
+        title.setFont(new Font("Arial", Font.BOLD, 25));
         name.setFont(new Font("Arial", Font.PLAIN, 20));
         id.setFont(new Font("Arial", Font.PLAIN, 20));
 
+        wrap.add(Box.createRigidArea(new Dimension(0, 10)));
         wrap.add(title);
+        wrap.add(Box.createRigidArea(new Dimension(0, 30)));
         wrap.add(name);
         wrap.add(id);
+        wrap.add(Box.createRigidArea(new Dimension(0, 10)));
 
         JPanel wrapp = new JPanel();
-        wrapp.setLayout(new BoxLayout(wrapp, BoxLayout.Y_AXIS));
-        wrapp.add(Box.createVerticalGlue());
+        wrapp.setPreferredSize(new Dimension(450, 361));
+        wrapp.setMaximumSize(new Dimension(450, 361));
+        wrapp.setLayout(new BoxLayout(wrapp, BoxLayout.X_AXIS));
+        wrapp.add(Box.createHorizontalGlue());
         wrapp.add(wrap);
-        wrapp.add(Box.createVerticalGlue());
+        wrapp.add(Box.createHorizontalGlue());
+        Border blackline = BorderFactory.createLineBorder(Color.black);
+        wrapp.setBorder(blackline);
 
-        setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
-        add(Box.createRigidArea(new Dimension(80, 0)));
+        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        add(Box.createRigidArea(new Dimension(0, 55)));
         add(wrapp);
     }
 }

@@ -60,9 +60,10 @@ public class Card4 extends JPanel implements ActionListener {
         optionFrame.setLayout(new BoxLayout(optionFrame, BoxLayout.Y_AXIS));
 
         notiOptions = new JLabel();
-        notiOptions.setText("This word already exists in dictionary! Choose option: ");
-        yesBtn = new JRadioButton("yes");
-        noBtn = new JRadioButton("no");
+
+        notiOptions.setText("This word already exists in dictionary!");
+        yesBtn = new JRadioButton("Continue");
+        noBtn = new JRadioButton("Cancel");
 
         ButtonGroup btnGroup = new ButtonGroup();
         btnGroup.add(yesBtn);
@@ -106,6 +107,8 @@ public class Card4 extends JPanel implements ActionListener {
             if (key == null) {
                 message.setText("This word doesn't exist in dictionary");
                 optionFrame.setVisible(false);
+                slangWordInput.setText("");
+                meaningInput.setText("");
             } else {
                 message.setText("");
                 optionFrame.setVisible(true);
@@ -117,10 +120,16 @@ public class Card4 extends JPanel implements ActionListener {
             if (yesBtn.isSelected()) {
                 if (dictionary.edit(key, means)) {
                     slangWordInput.setText("");
-                    message.setText("Edit successfully!");
+                    meaningInput.setText("");
+                    JOptionPane.showMessageDialog(this, "Edit successfully", "Successful message",
+                            JOptionPane.INFORMATION_MESSAGE);
                 } else
-                    message.setText("Edit failure!");
+                    JOptionPane.showMessageDialog(this, "Edit failure", "Successful message",
+                            JOptionPane.INFORMATION_MESSAGE);
+
             }
+            slangWordInput.setText("");
+            meaningInput.setText("");
             optionFrame.setVisible(false);
         }
     }

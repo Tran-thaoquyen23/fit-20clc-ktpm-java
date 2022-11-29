@@ -110,11 +110,11 @@ public class Card3 extends JPanel implements ActionListener {
                 Set<String> means = new HashSet<>();
                 means.add(meaningInput.getText());
                 key = slangWordInput.getText();
-                slangWordInput.setText("");
-                meaningInput.setText("");
                 dictionary.add(key, means);
                 JOptionPane.showMessageDialog(this, "Add successfully", "Successful message",
                         JOptionPane.INFORMATION_MESSAGE);
+                slangWordInput.setText("");
+                meaningInput.setText("");
                 optionFrame.setVisible(false);
             } else {
                 optionFrame.setVisible(true);
@@ -133,6 +133,8 @@ public class Card3 extends JPanel implements ActionListener {
             JOptionPane.showMessageDialog(this, "Add successfully", "Successful message",
                     JOptionPane.INFORMATION_MESSAGE);
             optionFrame.setVisible(false);
+            slangWordInput.setText("");
+            meaningInput.setText("");
         }
     }
 }

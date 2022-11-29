@@ -1,6 +1,7 @@
 import java.awt.*;
 import javax.swing.*;
 
+import java.awt.Color;
 import java.awt.event.*;
 import java.util.*;
 import java.util.List;
@@ -20,7 +21,7 @@ public class Card9 extends JPanel implements ActionListener {
     Card9(Dictionary dict) {
         dictionary = dict;
 
-        title = new JLabel("Question about slang word");
+        title = new JLabel("Question about definition");
 
         funQuesBtn = new JButton("Question");
         funQuesBtn.setActionCommand("funQues");
@@ -33,7 +34,8 @@ public class Card9 extends JPanel implements ActionListener {
         c = new JRadioButton("");
         d = new JRadioButton("");
 
-        message = new JLabel("status message");
+        message = new JLabel("");
+        message.setFont(new Font("Arial", Font.PLAIN, 15));
 
         bg = new ButtonGroup();
         bg.add(a);
@@ -95,8 +97,8 @@ public class Card9 extends JPanel implements ActionListener {
         panel2.add(Box.createRigidArea(new Dimension(0, 20)));
 
         panel3 = new JPanel();
-        panel3.setPreferredSize(new Dimension(100, 20));
-        panel3.setMaximumSize(new Dimension(100, 20));
+        panel3.setPreferredSize(new Dimension(100, 23));
+        panel3.setMaximumSize(new Dimension(100, 23));
         panel3.add(message);
 
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
@@ -109,7 +111,7 @@ public class Card9 extends JPanel implements ActionListener {
 
         panel1.setVisible(true);
         panel2.setVisible(false);
-        message.setVisible(false);
+        message.setVisible(true);
 
         panel1.setAlignmentX(Component.CENTER_ALIGNMENT);
         panel2.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -129,9 +131,10 @@ public class Card9 extends JPanel implements ActionListener {
             d.setText(funQ_slangWord.get(4));
             result = funQ_slangWord.get(5);
 
-            panel1.setVisible(false);
+            // panel1.setVisible(true);
+            funQuesBtn.setVisible(false);
+            title.setVisible(true);
             panel2.setVisible(true);
-            message.setVisible(true);
             message.setText("");
         }
         if (e.getActionCommand().equals("submit")) {
@@ -165,8 +168,10 @@ public class Card9 extends JPanel implements ActionListener {
             }
             if (flag) {
                 message.setText("Bingo!");
+                message.setForeground(Color.GREEN);
             } else {
-                message.setText("Wrong");
+                message.setText("Wrong!");
+                message.setForeground(Color.RED);
             }
         }
     }

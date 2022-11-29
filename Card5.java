@@ -44,9 +44,10 @@ public class Card5 extends JPanel implements ActionListener {
         optionFrame.setLayout(new BoxLayout(optionFrame, BoxLayout.Y_AXIS));
 
         notiOptions = new JLabel();
-        notiOptions.setText("This word already exists in dictionary! Choose option: ");
-        yesBtn = new JRadioButton("yes");
-        noBtn = new JRadioButton("no");
+
+        notiOptions.setText("Are you sure delete this word?");
+        yesBtn = new JRadioButton("Yes");
+        noBtn = new JRadioButton("No");
 
         ButtonGroup btnGroup = new ButtonGroup();
         btnGroup.add(yesBtn);
@@ -90,6 +91,7 @@ public class Card5 extends JPanel implements ActionListener {
             if (key == null) {
                 slangWordInput.setText("");
                 message.setText("This word doesn't exist in dictionary");
+                message.setText("");
                 optionFrame.setVisible(false);
             } else {
                 message.setText("");
@@ -98,9 +100,10 @@ public class Card5 extends JPanel implements ActionListener {
         } else if (e.getActionCommand().equals("confirm")) {
             if (yesBtn.isSelected()) {
                 dictionary.delete(key);
-                slangWordInput.setText("");
-                message.setText("Delete successfully!");
+                JOptionPane.showMessageDialog(this, "Delete successfully", "Successful message",
+                        JOptionPane.INFORMATION_MESSAGE);
             }
+            slangWordInput.setText("");
             optionFrame.setVisible(false);
         }
     }

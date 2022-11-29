@@ -1,13 +1,15 @@
 import java.awt.*;
 import javax.swing.*;
 import java.awt.event.*;
+import javax.swing.table.DefaultTableModel;
 
 //RESET
 public class Card6 extends JPanel implements ActionListener {
     Dictionary dictionary;
     JButton confirmBtn;
+    DefaultTableModel dtb;
 
-    Card6(Dictionary dict) {
+    Card6(Dictionary dict, DefaultTableModel dtb) {
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
         JLabel title = new JLabel("Reset");
@@ -17,6 +19,7 @@ public class Card6 extends JPanel implements ActionListener {
         confirmBtn.addActionListener(this);
 
         dictionary = dict;
+        this.dtb = dtb;
 
         add(Box.createVerticalGlue());
         add(title);
@@ -33,5 +36,7 @@ public class Card6 extends JPanel implements ActionListener {
         dictionary.reset();
         JOptionPane.showMessageDialog(this, "Reset successfully", "Successful message",
                 JOptionPane.INFORMATION_MESSAGE);
+
+        this.dtb.setRowCount(0);
     }
 }

@@ -5,17 +5,18 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.event.*;
 import java.util.*;
 
+// SEARCH
 public class Card1 extends JPanel implements ActionListener {
     JTextField input;
     Dictionary dictionary;
     JTable resultTable;
-    JButton retry;
     JScrollPane sp;
+    DefaultTableModel dtb, dtbh;
 
-    public Card1(Dictionary dict) {
+    public Card1(Dictionary dict, DefaultTableModel dtbh) {
+        this.dtbh = dtbh;
         input = new JTextField(20);
-        // input.setActionCommand("input");
-        JLabel title = new JLabel("Input 1");
+        JLabel title = new JLabel("Input the slang word");
         title.setLabelFor(input);
         JPanel options = new JPanel(new FlowLayout());
         JButton bySlangWord = new JButton("By slang word");
@@ -34,49 +35,35 @@ public class Card1 extends JPanel implements ActionListener {
         add(input);
         add(options);
 
-        resultTable = new JTable();
-        resultTable = new JTable();
-        DefaultTableModel dtb = (DefaultTableModel) resultTable.getModel();
+        dtb = new DefaultTableModel();
+        resultTable = new JTable(dtb);
         String row[] = new String[2];
         row[0] = "Slang_word";
         row[1] = "Meaning";
         dtb.addColumn(row[0]);
         dtb.addColumn(row[1]);
-        resultTable.setSize(350, 50);
         resultTable.getColumnModel().getColumn(0).setPreferredWidth(50);
         resultTable.getColumnModel().getColumn(1).setPreferredWidth(200);
 
-        // Frame Size
-        resultTable.setVisible(false);
-        add(resultTable);
-        JButton retry = new JButton("Retry");
-        retry.setActionCommand("retry");
-        retry.addActionListener(this);
-        // sp = new JScrollPane(resultTable);
+        sp = new JScrollPane(resultTable);
+        sp.setPreferredSize(new Dimension(400, 347));
 
-        add(retry);
-
-        setVisible(true);
+        add(sp);
     }
 
     public void actionPerformed(ActionEvent e) {
         if (e.getActionCommand().equals("bySlangWord")) {
-            // remove(sp);
-            // resultTable.setVisible(false);
             search(dictionary, 1);
+            input.setText("");
         } else if (e.getActionCommand().equals("byDefinition")) {
-            resultTable.setVisible(false);
             search(dictionary, 2);
+            input.setText("");
         }
     }
 
-    public void search(Dictionary dictionary, int type) { // type: 1: slang word 2: definition
+    public void search(Dictionary dictionary, int type) {
         String row[] = new String[2];
 
-        // result.setPreferredSize(new Dimension(450, 400));
-        DefaultTableModel dtb = (DefaultTableModel) resultTable.getModel();
-        // dtb.addColumn(row[1]);
-        // dtb.addRow(row);
         TreeMap<String, Set<String>> searchResult;
         if (type == 1) {
             searchResult = dictionary.search_BySlangWord(input.getText());
@@ -85,6 +72,8 @@ public class Card1 extends JPanel implements ActionListener {
         }
         Set<String> keys = searchResult.keySet();
         String mean = "";
+        dtb.setRowCount(0);
+
         for (String item : keys) {
             row[0] = item;
             Set<String> meanings = searchResult.get(item);
@@ -94,18 +83,13 @@ public class Card1 extends JPanel implements ActionListener {
                 mean = mean.concat(meaning);
                 count++;
                 if (count < length) {
-                    mean.concat("| ");
+                    mean = mean.concat(" ,  ");
                 }
             }
             row[1] = mean;
-            System.out.println("mean: " + row[1]);
             dtb.addRow(row);
+            dtbh.addRow(row);
             mean = "";
         }
-        resultTable.setVisible(true);
-        sp = new JScrollPane(resultTable);
-        add(sp);
-
     }
-
-}
+};

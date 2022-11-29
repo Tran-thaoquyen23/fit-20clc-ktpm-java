@@ -1,44 +1,44 @@
 import java.awt.*;
 import javax.swing.*;
-import java.awt.event.*;
-import java.util.*;
+import javax.swing.table.DefaultTableModel;
 
-public class Card2 extends JPanel implements ActionListener {
-    JTextField input;
+//HISTORY
+public class Card2 extends JPanel {
     Dictionary dictionary;
+    JScrollPane sp;
+    DefaultTableModel dtb;
 
-    public Card2(Dictionary dict) {
-        JTextField searchInput = new JTextField(20);
-        // input.setActionCommand("input");
-        JLabel title = new JLabel("Input 2");
-        title.setLabelFor(searchInput);
-        JPanel options = new JPanel(new FlowLayout());
-        JButton bySlangWord = new JButton("By slang word");
-        bySlangWord.setActionCommand("bySlangWord");
-        bySlangWord.addActionListener(this);
-
-        JButton byDefinition = new JButton("By definition");
-        byDefinition.setActionCommand("byDefinition");
-        byDefinition.addActionListener(this);
-
-        options.add(bySlangWord);
-        options.add(byDefinition);
-
+    public Card2(Dictionary dict, DefaultTableModel dtb) {
+        JLabel title = new JLabel("History");
+        title.setLabelFor(this);
         dictionary = dict;
+
+        this.dtb = dtb;
+        JTable HistoryTable = new JTable(dtb);
+        String row[] = new String[2];
+        row[0] = "Slang_word";
+        row[1] = "Meaning";
+        dtb.addColumn(row[0]);
+        dtb.addColumn(row[1]);
+
+        HistoryTable.getColumnModel().getColumn(0).setPreferredWidth(50);
+        HistoryTable.getColumnModel().getColumn(1).setPreferredWidth(200);
+
+        sp = new JScrollPane(HistoryTable);
+        sp.setPreferredSize(new Dimension(470, 365));
+        sp.setMaximumSize(new Dimension(470, 365));
+        sp.setVisible(true);
+
+        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        add(Box.createVerticalGlue());
         add(title);
-        add(searchInput);
-        add(options);
+        add(Box.createRigidArea(new Dimension(0, 20)));
+        add(sp);
+        add(Box.createVerticalGlue());
+
+        title.setFont(new Font("Arial", Font.BOLD, 17));
+        title.setAlignmentX(Component.CENTER_ALIGNMENT);
+        sp.setAlignmentX(Component.CENTER_ALIGNMENT);
         setVisible(true);
     }
-
-    public void actionPerformed(ActionEvent e) {
-        if (e.getActionCommand().equals("bySlangWord")) {
-            JTable resultTable = new JTable();
-            TreeMap<String, Set<String>> searchResult = dictionary.search_BySlangWord(input.getText());
-            Set<String> column = searchResult.keySet();
-            // resultTable.addColumn(column);
-
-        }
-    }
-
 }
